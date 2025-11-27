@@ -2,9 +2,10 @@ from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.s3_utils import upload_prediction_to_s3
 from src.inference import predict_single
-from src.s3_utils import save_prediction_to_s3
 from app.schemas import HeartAttackInput
+
 
 app = FastAPI(
     title="Heart Attack Risk Prediction API",
@@ -28,28 +29,23 @@ def read_root():
 
 @app.post("/predict")
 def predict(input_data: HeartAttackInput):
-   
+    data_dict = input_data.model_dump()
+
+    result = predict_single(data_dict)
+
+    full_record = {
+        "input": data_dict,
+        "prediction": result["prediction"],
+        "probability_positive": result["probability_positive"],
+    }
+
+    # Guardar en S3 (no hace fallar la API si S3 falla)
     try:
-        
-        data_dict = input_data.dict()
-
-      
-        prediction_result = predict_single(data_dict)
-
-        
-        record = {
-            "input": data_dict,
-            "prediction": prediction_result["prediction"],
-            "probability_positive": prediction_result["probability_positive"],
-        }
-
-        
-        try:
-            save_prediction_to_s3(record)
-        except Exception as e:
-            print(f"Error guardando en S3 (no fatal): {e}")
-
-        return record
-
+        s3_key = upload_prediction_to_s3(full_record)
+        full_record["s3_key"] = s3_key
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error subiendo a S3: {e}")
+        full_record["s3_key"] = None
+
+    return full_record
+
