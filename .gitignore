@@ -218,3 +218,5 @@ data/processed/*
 models/*
 # MLflow tracking folder
 mlruns/
+# Environment variables
+.env
