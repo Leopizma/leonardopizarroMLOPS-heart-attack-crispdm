@@ -43,6 +43,7 @@ Mejor modelo Random Forest
 
 ## 6. Despliegue (MLOps)
 src/pipeline.py
+
 <img width="569" height="320" alt="image" src="https://github.com/user-attachments/assets/c9307668-a5bb-4b4c-b194-b2e37efa0d82" />
 
 Despliegue en EC2: 
@@ -53,8 +54,11 @@ pip install -r requirements.txt
 nano .env #Keys
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 
-systemctl status:
+### systemctl status:
+
 <img width="1894" height="997" alt="status fastapi" src="https://github.com/user-attachments/assets/1d85cd3a-68cf-451f-bd00-6be53a8be283" />
-el servidor funcionando:
+
+### el servidor funcionando
+
 <img width="1912" height="970" alt="JSON" src="https://github.com/user-attachments/assets/0246e795-4439-4419-8a49-80ace64a9a19" />
 
