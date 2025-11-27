@@ -18,6 +18,9 @@ Entrenar modelos de Machine Learning capaces de clasificar si un paciente tiene 
 ## 2. Entendimiento de los Datos
 
 <img width="308" height="408" alt="image" src="https://github.com/user-attachments/assets/6da46692-1196-40e1-a3e6-d6f2630e08ec" />
+<img width="1386" height="253" alt="image" src="https://github.com/user-attachments/assets/cac915a2-5128-4b84-9aac-8331288c6a7f" />
+<img width="582" height="459" alt="image" src="https://github.com/user-attachments/assets/1ee873af-bd86-4588-b10f-90244096ac65" />
+<img width="825" height="729" alt="image" src="https://github.com/user-attachments/assets/57c4dc4a-009f-4195-8056-3583c6804db2" />
 
 
 
