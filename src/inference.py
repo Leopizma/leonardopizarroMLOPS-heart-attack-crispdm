@@ -4,25 +4,30 @@ import pandas as pd
 
 from src.pipeline import load_pipeline
 
-# Cargar pipeline
-_pipeline = load_pipeline()
+_pipeline = None
+
+
+def get_pipeline():
+    global _pipeline
+    if _pipeline is None:
+        _pipeline = load_pipeline()
+    return _pipeline
 
 
 def predict_single(input_data: Dict[str, Any]) -> Dict[str, Any]:
     """
     Realiza una predicción para un solo paciente.
-
-    input_data: diccionario con las features del paciente.
-    Devuelve: dict con predicción y probabilidad (si existe).
     """
+    pipeline = get_pipeline()
+
     df = pd.DataFrame([input_data])
 
-    pred = _pipeline.predict(df)[0]
+    pred = pipeline.predict(df)[0]
 
     result = {"prediction": int(pred)}
 
     try:
-        proba = _pipeline.predict_proba(df)[0][1] 
+        proba = pipeline.predict_proba(df)[0][1]
         result["probability_positive"] = float(proba)
     except Exception:
         result["probability_positive"] = None
