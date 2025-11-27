@@ -38,44 +38,23 @@ notebooks/02_preparation_and_modeling.ipynb
 | SVM                 | 0.8484       |
 | Random Forest       | **0.8571** |
 
-
+Mejor modelo Random Forest 
+<img width="498" height="455" alt="image" src="https://github.com/user-attachments/assets/a0e100ae-9df1-4687-80ce-e3a535f7b068" />
 
 ## 6. Despliegue (MLOps)
+src/pipeline.py
+<img width="569" height="320" alt="image" src="https://github.com/user-attachments/assets/c9307668-a5bb-4b4c-b194-b2e37efa0d82" />
 
-- Creación de un **pipeline** completo que reciba datos crudos y devuelva una predicción.
-- Implementación de un servicio con **FastAPI** exponiendo un endpoint `/predict`.
-- Registro de las predicciones en un bucket de **S3**.
-- Despliegue del servicio en una instancia **EC2**.
-- Configuración de un **daemon con systemd** para mantener la app siempre activa.
-- Prueba del endpoint usando `curl` desde la máquina local.
+Despliegue en EC2: 
+git clone <repo>
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+nano .env #Keys
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 
----
+systemctl status:
+<img width="1894" height="997" alt="status fastapi" src="https://github.com/user-attachments/assets/1d85cd3a-68cf-451f-bd00-6be53a8be283" />
+el servidor funcionando:
+<img width="1912" height="970" alt="JSON" src="https://github.com/user-attachments/assets/0246e795-4439-4419-8a49-80ace64a9a19" />
 
-## 7. Estructura del proyecto
-
-```text
-data/
- ├─ raw/            # Dataset original descargado de Kaggle
- └─ processed/      # Datos transformados/listos para modelar
-
-notebooks/          # Notebooks de EDA, preparación, modelado, evaluación
-
-src/
- ├─ config.py       # Rutas, nombres de experimento, configuración general
- ├─ data_prep.py    # Funciones de carga y preparación de datos
- ├─ models_training.py  # Entrenamiento de modelos + Optuna + MLflow
- ├─ pipeline.py     # Pipeline final de inferencia
- ├─ inference.py    # Funciones para usar el pipeline en producción
- └─ s3_utils.py     # Funciones para guardar info en S3
-
-app/
- └─ main.py         # Aplicación FastAPI con el endpoint de predicción
-
-deployment/
- ├─ ec2_setup.md    # Pasos realizados en la instancia EC2
- ├─ service_fastapi.service  # Archivo de systemd para levantar la app
- └─ curl_examples.md # Ejemplos de llamadas al endpoint usando curl
-
-docs/
- ├─ crispdm_report.md       # Documento describiendo cada fase CRISP-DM
- └─ aws_screenshots/        # Capturas de AWS, systemctl, curl, etc.
