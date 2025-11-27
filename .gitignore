@@ -216,3 +216,5 @@ data/processed/*
 
 # Ignore model artifacts
 models/*
+# MLflow tracking folder
+mlruns/
