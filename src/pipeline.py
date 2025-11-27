@@ -57,7 +57,7 @@ class HeartAttackPipeline:
 
 def build_pipeline_from_components() -> HeartAttackPipeline:
    
-    # Lista de columnas en el ORDEN en que se entrenó el modelo
+
     feature_names = [
         "age",
         "sex",
@@ -74,14 +74,12 @@ def build_pipeline_from_components() -> HeartAttackPipeline:
         "thal",
     ]
 
-    # Cargar scaler entrenado
+    
     scaler_path = os.path.join(DATA_PROCESSED_DIR, "scaler.joblib")
     scaler = joblib.load(scaler_path)
 
-    # Cargar mejor modelo
     model = joblib.load(BEST_MODEL_PATH)
 
-    # Crear pipeline en memoria
     pipeline = HeartAttackPipeline(
         feature_names=feature_names,
         scaler=scaler,
@@ -100,7 +98,7 @@ def load_pipeline() -> HeartAttackPipeline:
 
 
 if __name__ == "__main__":
-    # Solo para probar rápido si quieres
+
     pipeline = build_pipeline_from_components()
     print("Pipeline construido correctamente con columnas:")
     print(pipeline.feature_names)

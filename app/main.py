@@ -9,7 +9,7 @@ from app.schemas import HeartAttackInput
 
 app = FastAPI(
     title="Heart Attack Risk Prediction API",
-    description="API para predecir riesgo de ataque cardíaco usando un modelo entrenado.",
+    description="API",
     version="1.0.0",
 )
 
@@ -39,7 +39,6 @@ def predict(input_data: HeartAttackInput):
         "probability_positive": result["probability_positive"],
     }
 
-    # Guardar en S3 (no hace fallar la API si S3 falla)
     try:
         s3_key = upload_prediction_to_s3(full_record)
         full_record["s3_key"] = s3_key

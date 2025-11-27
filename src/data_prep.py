@@ -14,7 +14,6 @@ def load_raw_data():
 
 def basic_cleaning(df):
     """limpieza."""
-    # El dataset no tiene nulos críticos, pero se deja la función por si se necesita.
     df = df.drop_duplicates()
     return df
 

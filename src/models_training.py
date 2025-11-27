@@ -25,7 +25,6 @@ def load_processed_data():
     y_train = pd.read_csv(os.path.join(DATA_PROCESSED_DIR, "y_train.csv"))
     y_test = pd.read_csv(os.path.join(DATA_PROCESSED_DIR, "y_test.csv"))
 
-    # y_train / y_test vienen como un DataFrame de una sola columna
     y_train = y_train.squeeze()
     y_test = y_test.squeeze()
 
@@ -33,7 +32,7 @@ def load_processed_data():
 
 
 def get_model(model_name: str, trial: optuna.trial.Trial):
-    """Devuelve un modelo según el nombre y los hiperparámetros sugeridos por Optuna."""
+   
     if model_name == "logreg":
         C = trial.suggest_float("C", 1e-3, 10.0, log=True)
         max_iter = trial.suggest_int("max_iter", 100, 1000)
@@ -73,35 +72,20 @@ def get_model(model_name: str, trial: optuna.trial.Trial):
 
 
 def objective(trial: optuna.trial.Trial, model_name: str, X_train, X_test, y_train, y_test):
-    """Función objetivo para Optuna: entrena y evalúa un modelo, logueando en MLflow."""
 
-    # Para que cada trial quede registrado en MLflow:
     with mlflow.start_run(nested=True):
-        # Indicar el tipo de modelo
+      
         mlflow.set_tag("model_name", model_name)
-
-        # Crear el modelo con hiperparámetros sugeridos
         model = get_model(model_name, trial)
-
-        # Entrenar
         model.fit(X_train, y_train)
-
-        # Predicciones
         y_pred = model.predict(X_test)
-
-        # Métrica principal (puedes cambiarla si decides otra)
         f1 = f1_score(y_test, y_pred)
-
-        # Log de hiperparámetros en MLflow
         mlflow.log_params(trial.params)
         mlflow.log_metric("f1_score", f1)
-
-        # Devolver la métrica que Optuna va a maximizar
         return f1
 
 
 def run_study_for_model(model_name: str, X_train, X_test, y_train, y_test, n_trials: int = 20):
-    """Crea un estudio de Optuna para un solo modelo y devuelve el mejor trial."""
     study = optuna.create_study(direction="maximize")
     study.optimize(
         lambda trial: objective(trial, model_name, X_train, X_test, y_train, y_test),
@@ -111,10 +95,8 @@ def run_study_for_model(model_name: str, X_train, X_test, y_train, y_test, n_tri
 
 
 def main():
-    # Configurar experiment en MLflow
     mlflow.set_experiment(MLFLOW_EXPERIMENT_NAME)
 
-    # Cargar datos
     X_train, X_test, y_train, y_test = load_processed_data()
 
     best_overall = {
@@ -124,7 +106,6 @@ def main():
         "trial": None,
     }
 
-    # Lista de modelos a entrenar
     model_names = ["logreg", "svm", "rf"]
 
     with mlflow.start_run(run_name="all_models_experiment"):
@@ -139,22 +120,18 @@ def main():
             print(f"Mejor F1 para {model_name}: {best_f1:.4f}")
             mlflow.log_metric(f"best_f1_{model_name}", best_f1)
 
-            # Entrenar modelo final con los mejores hiperparámetros de ese modelo
             final_model = get_model(model_name, best_trial)
             final_model.fit(X_train, y_train)
 
-            # Guardar el mejor modelo global
             if best_f1 > best_overall["f1"]:
                 best_overall["model_name"] = model_name
                 best_overall["f1"] = best_f1
                 best_overall["model_object"] = final_model
                 best_overall["trial"] = best_trial
 
-        # Guardar el mejor modelo en disco
         os.makedirs(os.path.dirname(BEST_MODEL_PATH), exist_ok=True)
         joblib.dump(best_overall["model_object"], BEST_MODEL_PATH)
 
-        print("=====================================")
         print("Mejor modelo global:")
         print("Modelo:", best_overall["model_name"])
         print("F1:", best_overall["f1"])
