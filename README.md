@@ -17,14 +17,11 @@ Entrenar modelos de Machine Learning capaces de clasificar si un paciente tiene 
 
 ## 2. Entendimiento de los Datos
 
-Incluye:
+<img width="308" height="408" alt="image" src="https://github.com/user-attachments/assets/6da46692-1196-40e1-a3e6-d6f2630e08ec" />
 
-- Análisis univariante y bivariante.
-- Revisión de distribuciones y posibles outliers.
-- Revisión de correlaciones entre variables.
-- Identificación de valores faltantes o inconsistencias.
 
----
+
+
 
 ## 3. Preparación de Datos
 
