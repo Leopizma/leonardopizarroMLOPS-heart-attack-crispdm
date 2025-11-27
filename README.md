@@ -23,38 +23,22 @@ Entrenar modelos de Machine Learning capaces de clasificar si un paciente tiene 
 <img width="525" height="429" alt="image" src="https://github.com/user-attachments/assets/57c4dc4a-009f-4195-8056-3583c6804db2" />
 
 ## 3. Preparación de Datos
-
-Transformaciones mínimas necesarias para poder entrenar los modelos:
-
-- Separación de variables de entrada (X) y salida (y).
-- Escalado/normalización cuando sea necesario.
-- Codificación de variables categóricas (si aplica).
-- División en conjuntos de entrenamiento y prueba.
-
----
+Todo el preprocesamiento está en:
+src/data_prep.py
+notebooks/02_preparation_and_modeling.ipynb
 
 ## 4. Modelación
-
-Se utilizarán al menos **3 modelos** de Machine Learning, incluyendo al menos un modelo de ensamble:
-
-- Regresión Logística
-- SVM (Support Vector Machine)
-- Random Forest (ensamble)
-
-Se realizará:
-
-- Búsqueda de hiperparámetros con **Optuna**.
-- Registro de experimentos y resultados con **MLflow** en un único experimento.
-
----
+<img width="1903" height="1033" alt="docs_mlflow_all_models_run" src="https://github.com/user-attachments/assets/68ebe17f-4e2b-4d59-bf6d-04ed03e0e095" />
 
 ## 5. Evaluación
 
-- Selección de la **métrica principal de desempeño** según el problema (ej. Recall, F1).
-- Comparación entre modelos.
-- Análisis de resultados y discusión de cuál es el mejor modelo para el caso.
+| Modelo              | Mejor F1     |
+| ------------------- | ------------ |
+| Logistic Regression | 0.8307       |
+| SVM                 | 0.8484       |
+| Random Forest       | **0.8571** |
 
----
+
 
 ## 6. Despliegue (MLOps)
 
